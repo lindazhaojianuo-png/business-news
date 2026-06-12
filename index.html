@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edexcel A-Level Business | Current News by Theme</title>
+  <style>
+    :root {
+      --primary: #1a3a5c;
+      --accent: #e8412a;
+      --t1: #1d6fa4;
+      --t2: #2a8a5c;
+      --t3: #8a3d9e;
+      --t4: #c9540e;
+      --bg: #f5f6f8;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #5a6074;
+      --border: #dde1ea;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .header-brand h1 { font-size: 1.25rem; font-weight: 700; }
+    .header-brand p  { font-size: 0.78rem; color: #b0c4d8; margin-top: 2px; }
+    .header-meta { font-size: 0.75rem; color: #b0c4d8; text-align: right; }
+    .header-meta strong { color: #fff; }
+
+    /* ── Tab bar ── */
+    .tab-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 68px;
+      z-index: 99;
+    }
+    .tab-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar-inner::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 0.85rem 1.4rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--accent); }
+    .tab-btn .badge {
+      display: inline-block;
+      background: var(--border);
+      color: var(--muted);
+      font-size: 0.68rem;
+      padding: 1px 7px;
+      border-radius: 10px;
+      margin-left: 5px;
+      font-weight: 500;
+    }
+    .tab-btn.active .badge { background: var(--accent); color: #fff; }
+
+    /* ── Main ── */
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    .theme-panel { display: none; }
+    .theme-panel.active { display: block; }
+
+    /* ── Theme header ── */
+    .theme-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      padding: 1.5rem 1.75rem;
+      border-radius: 12px;
+      color: #fff;
+    }
+    .t1-header { background: linear-gradient(135deg, #1d6fa4, #2c8fd4); }
+    .t2-header { background: linear-gradient(135deg, #2a8a5c, #3aaa74); }
+    .t3-header { background: linear-gradient(135deg, #8a3d9e, #a855cc); }
+    .t4-header { background: linear-gradient(135deg, #c9540e, #e87022); }
+
+    .theme-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      opacity: 0.3;
+      line-height: 1;
+      min-width: 52px;
+    }
+    .theme-header h2 { font-size: 1.3rem; font-weight: 700; }
+    .theme-header .sub { font-size: 0.82rem; opacity: 0.85; margin-top: 3px; }
+    .topic-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .topic-pill {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 2px 11px;
+      font-size: 0.72rem;
+    }
+
+    /* ── Filter strip ── */
+    .filter-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 1.25rem;
+    }
+    .filter-btn {
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: #aaa; color: var(--text); }
+    .filter-btn.active-filter { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* ── Exam tip ── */
+    .exam-tip {
+      background: #fffbeb;
+      border: 1px solid #f6d860;
+      border-left: 4px solid #f0be00;
+      border-radius: 8px;
+      padding: 0.85rem 1.15rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.83rem;
+    }
+    .exam-tip strong { color: #7a5800; display: block; margin-bottom: 3px; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* ── News grid ── */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 1.15rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.18s, transform 0.18s;
+    }
+    .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.1); transform: translateY(-2px); }
+
+    .card-top { padding: 1.05rem 1.2rem 0.7rem; flex: 1; }
+    .card-bottom {
+      padding: 0.6rem 1.2rem 0.8rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    /* Subtopic tag */
+    .subtopic-tag {
+      display: inline-block;
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 2px 9px;
+      border-radius: 4px;
+      margin-bottom: 7px;
+      color: #fff;
+    }
+    /* Main topic pill (smaller, outlined) */
+    .main-topic {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 1px 8px;
+      border-radius: 10px;
+      margin-left: 5px;
+      margin-bottom: 7px;
+      vertical-align: middle;
+      opacity: 0.85;
+    }
+
+    .t1 .subtopic-tag { background: var(--t1); }
+    .t2 .subtopic-tag { background: var(--t2); }
+    .t3 .subtopic-tag { background: var(--t3); }
+    .t4 .subtopic-tag { background: var(--t4); }
+
+    .t1 .main-topic { background: #d4ecf7; color: #0d4f7a; }
+    .t2 .main-topic { background: #d0ede2; color: #16573a; }
+    .t3 .main-topic { background: #ead5f5; color: #5a1878; }
+    .t4 .main-topic { background: #fce0cc; color: #7a2d00; }
+
+    .card h3 { font-size: 0.93rem; font-weight: 700; line-height: 1.4; margin-bottom: 6px; }
+    .card p  { font-size: 0.81rem; color: var(--muted); line-height: 1.55; }
+
+    .source-name { font-size: 0.7rem; color: var(--muted); font-style: italic; }
+    .read-link {
+      font-size: 0.76rem; font-weight: 600; color: var(--primary);
+      text-decoration: none; white-space: nowrap;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--primary);
+      color: #b0c4d8;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.76rem;
+    }
+
+    @media (max-width: 640px) {
+      .news-grid { grid-template-columns: 1fr; }
+      main { padding: 1.25rem 1rem 3rem; }
+      .theme-header { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <h1>Edexcel A-Level Business &nbsp;|&nbsp; Current News by Theme</h1>
+      <p>Real-world stories mapped to subtopics of the 9BS0 specification — 10 stories per theme</p>
+    </div>
+    <div class="header-meta"><strong>Last updated:</strong><br>June 2026</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" onclick="showTab('t1',this)">Theme 1 — Marketing &amp; People <span class="badge">10</span></button>
+    <button class="tab-btn" onclick="showTab('t2',this)">Theme 2 — Managing Business Activities <span class="badge">10</span></button>
+    <button class="tab-btn" onclick="showTab('t3',this)">Theme 3 — Decisions &amp; Strategy <span class="badge">10</span></button>
+    <button class="tab-btn" onclick="showTab('t4',this)">Theme 4 — Global Business <span class="badge">10</span></button>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════ THEME 1 ═══════════════════════ -->
+<div id="t1" class="theme-panel active">
+  <div class="theme-header t1-header">
+    <div class="theme-number">1</div>
+    <div>
+      <h2>Marketing &amp; People</h2>
+      <p class="sub">Year 12 · Paper 1 (with Theme 4) · Key topics below — click a pill to filter</p>
+      <div class="topic-pills">
+        <span class="topic-pill">Meeting Customer Needs</span>
+        <span class="topic-pill">The Market</span>
+        <span class="topic-pill">Marketing Mix &amp; Strategy</span>
+        <span class="topic-pill">Managing People</span>
+        <span class="topic-pill">Entrepreneurs &amp; Leaders</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-tip">
+    <strong>📌 Paper 1 Exam Tip</strong>
+    Use these stories to build a bank of named, real examples. For every 20-mark answer, try to name a real company, reference a specific theory (e.g. Herzberg, Ansoff, price elasticity), and show how the news context illustrates it. Examiners reward applied, up-to-date knowledge.
+  </div>
+
+  <div class="section-label">10 current stories — Theme 1: Marketing &amp; People</div>
+  <div class="news-grid t1">
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Market Research</span><span class="main-topic">Meeting Customer Needs</span>
+        <h3>Brand Loyalty Collapses: 72% of UK Consumers Ready to Switch to Cheaper Alternatives</h3>
+        <p>Attest's 2026 UK Consumer Trends report finds that half of UK consumers describe their spending as "cautious" and 72% say they are likely to switch to cheaper brands. Businesses relying on brand loyalty as a competitive advantage must rethink their value propositions as cost becomes the primary purchasing driver.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Attest 2026 UK Consumer Trends Report</span>
+        <a class="read-link" href="https://www.askattest.com/our-research/2026-uk-consumer-trends-report" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Segmentation &amp; Targeting</span><span class="main-topic">The Market</span>
+        <h3>Decision Intelligence Replaces Surveys — UK Market Research Industry Grows at 5.6% CAGR</h3>
+        <p>The UK market research industry has grown at 5.6% annually since 2021. CMOs now demand "Decision Intelligence" — synthesised insights, not raw data. Companies like YouGov, Ipsos and Dunnhumby lead the sector, with psychographic and behavioural segmentation now standard for precise targeting of cost-sensitive consumers.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">IBISWorld UK Market Research Industry 2026</span>
+        <a class="read-link" href="https://www.ibisworld.com/united-kingdom/industry/market-research-public-opinion-polling/4000/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Product &amp; Innovation</span><span class="main-topic">Marketing Mix &amp; Strategy</span>
+        <h3>Innovate UK Overhauls Support — Six Priority Sectors Get Tailored Grants and Loans in 2026</h3>
+        <p>Innovate UK announced a major shift in March 2026: instead of generic funding, it will provide customised grants and loans targeting advanced manufacturing, clean energy, creative industries, defence, life sciences, and digital tech. Companies prioritising innovation report up to 30% higher revenue growth, and 68% of UK manufacturers now embed customer research into product development pipelines.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">UKRI / Innovate UK 2026</span>
+        <a class="read-link" href="https://www.ukri.org/news/new-plan-to-help-the-next-generation-of-tech-businesses-thrive/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Pricing Strategy</span><span class="main-topic">Marketing Mix &amp; Strategy</span>
+        <h3>Bank of England Flags Rise of Dynamic Personalised Pricing — "Different Prices for Different People"</h3>
+        <p>A Bank of England analysis in 2026 highlights the rapid rise of AI-driven personalised pricing, where businesses charge different customers different prices based on their browsing behaviour and willingness to pay. The share of firms using market-responsive pricing tools is set to rise from 21% to 31%. A 1% price increase typically delivers an 11% profit impact — making pricing strategy a key lever for margin management.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Bank of England Bank Insights 2026</span>
+        <a class="read-link" href="https://www.bankofengland.co.uk/bank-insights/2026/this-time-its-personal-the-rise-of-dynamic-personalised-pricing-and-what-it-means-for-inflation" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Promotion &amp; Place</span><span class="main-topic">Marketing Mix &amp; Strategy</span>
+        <h3>92% of UK Consumers Compare Prices Online Before Buying — Traditional Advertising Losing Ground</h3>
+        <p>With 92% of UK consumers researching prices online before purchase, the role of promotion has shifted from persuasion to information and trust-building. Discovery is now fragmented across AI assistants, TikTok, and comparison sites. Businesses that invest in transparent, digital-first promotional strategies are outperforming those relying on traditional above-the-line advertising.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Yieldigo / Experian Marketing Forward 2026</span>
+        <a class="read-link" href="https://www.yieldigo.com/blog/retail-competitive-pricing-analysis-complete-guide-for-2026/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Ansoff Matrix</span><span class="main-topic">Marketing Mix &amp; Strategy</span>
+        <h3>AI-Driven Personalisation as Market Penetration — Brands Target Existing Customers More Precisely</h3>
+        <p>Rather than entering new markets, many firms in 2026 are deepening relationships with existing customers through AI-powered personalisation — a classic market penetration strategy on Ansoff's Matrix. First-party data is now the foundation: businesses that collect data directly from consenting customers can tailor pricing, product recommendations, and promotions to individual profiles with GDPR compliance.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Gartner Future of Marketing / Quad Insights 2026</span>
+        <a class="read-link" href="https://www.gartner.com/en/articles/future-of-marketing" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Motivation &amp; Retention</span><span class="main-topic">Managing People</span>
+        <h3>Flexible Working Becomes a Day-One Right Under UK Employment Rights Act 2025</h3>
+        <p>From April 2026, employees can request flexible working from day one — previously a 26-week wait. Three-quarters of workers say flexibility influences whether they stay with their employer. Over 75% of UK managers believe flexible working increases productivity. By 2027, it becomes the legal default for all employers unless proven unreasonable — a major shift in how businesses manage their workforce.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Lancaster University Work Foundation / CIPD 2026</span>
+        <a class="read-link" href="https://www.lancaster.ac.uk/news/employers-urged-to-embrace-flexible-working-options-in-2026-as-millions-still-miss-out" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Recruitment &amp; Training</span><span class="main-topic">Managing People</span>
+        <h3>AI Literacy is Now the Hardest Skill to Recruit in the UK — 70% of Employers Struggle</h3>
+        <p>For the first time, AI literacy tops the UK's skills gap list in 2026. 70% of employers say sourcing people with the right technical skills is their biggest hiring barrier. One in three UK workers plans to change jobs, making retention as important as recruitment. Healthcare and engineering remain on the Shortage Occupation List, with NHS staffing gaps leading the list.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Totaljobs / DavidsonMorris UK Labour Market 2026</span>
+        <a class="read-link" href="https://www.totaljobs.com/recruiter-advice/hiring-people/hiring-trends-update/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Leadership Styles</span><span class="main-topic">Entrepreneurs &amp; Leaders</span>
+        <h3>AI Flattens Corporate Hierarchies — 41% of Firms Cut Management Layers in 2025–26</h3>
+        <p>As AI agents take over coordination and reporting tasks traditionally done by middle managers, firms are restructuring towards flatter hierarchies. 41% of employees report their companies removed management layers in the past year. New C-suite roles — Chief Growth Officer, VP of Business Development — reflect a shift towards entrepreneurial, growth-focused leadership over traditional hierarchical control.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">JPMorgan Business Leaders Outlook 2026</span>
+        <a class="read-link" href="https://www.jpmorgan.com/insights/markets-and-economy/business-leaders-outlook/2026-us-business-leaders-outlook" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Entrepreneurship</span><span class="main-topic">Entrepreneurs &amp; Leaders</span>
+        <h3>Global Entrepreneurship Summit 2026: "Scaling Vision in a Connected World" — Dubai, June</h3>
+        <p>The 11th Global Entrepreneurship &amp; Business Management Summit met in Dubai in June 2026. With 71% of business leaders confident in their own company's performance despite economic headwinds, entrepreneurial activity globally remains high. Founders are increasingly measured on innovation depth, leadership, and long-term social impact — not just profit — reflecting Drucker's view of entrepreneurship as a management discipline.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">JPMorgan 2026 Outlook / Global Entrepreneurship Summit 2026</span>
+        <a class="read-link" href="https://entrepreneurship.europeannualconferences.com/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════ THEME 2 ═══════════════════════ -->
+<div id="t2" class="theme-panel">
+  <div class="theme-header t2-header">
+    <div class="theme-number">2</div>
+    <div>
+      <h2>Managing Business Activities</h2>
+      <p class="sub">Year 12 · Paper 2 (with Theme 3) · Most quantitative paper — link news to numbers</p>
+      <div class="topic-pills">
+        <span class="topic-pill">Raising Finance</span>
+        <span class="topic-pill">Financial Planning</span>
+        <span class="topic-pill">Managing Finance</span>
+        <span class="topic-pill">Resource Management</span>
+        <span class="topic-pill">External Influences</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-tip">
+    <strong>📌 Paper 2 Exam Tip</strong>
+    For each story, practise writing the number and its implication: e.g. "Bank Rate at 3.75% increases the cost of borrowing, worsening cash flow for highly geared SMEs." Decision trees, ratio analysis and break-even are all examinable — use these real contexts to frame practice calculations.
+  </div>
+
+  <div class="section-label">10 current stories — Theme 2: Managing Business Activities</div>
+  <div class="news-grid t2">
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Venture Capital</span><span class="main-topic">Raising Finance</span>
+        <h3>UK Startups Raise $15 Billion in 545 Equity Rounds — AI and Fintech Lead in H1 2026</h3>
+        <p>Venture capital investment in UK startups reached $15 billion across 545 equity funding rounds by June 2026. AI, fintech and digital infrastructure attract the highest valuations. Post-Brexit regulatory stabilisation has reduced friction for US and Asian institutional investors entering UK funds. VC investors typically take an equity stake in exchange for capital and board influence — a key trade-off versus debt finance.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Tracxn / Success Knocks UK VC Analysis 2026</span>
+        <a class="read-link" href="https://successknocks.com/analysis-of-venture-capital-trends-uk-2026/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Share Capital &amp; IPO</span><span class="main-topic">Raising Finance</span>
+        <h3>LSE Launches PISCES — A New Private Securities Market Giving Firms a Path Before Full IPO</h3>
+        <p>The London Stock Exchange launched the Private Securities Market (PISCES) in early 2026, allowing investors to trade shares in private companies at set intervals — without the cost and disclosure burden of a full IPO. 26 full IPOs took place in the UK by June 2026. PISCES gives growth companies a new route to raise equity capital and provide shareholder liquidity while staying private.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">EY Global IPO Trends Q1 2026 / Slaughter and May</span>
+        <a class="read-link" href="https://www.ey.com/en_uk/insights/ipo/trends" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Cash Flow Management</span><span class="main-topic">Financial Planning</span>
+        <h3>UK SMEs Deal with Cash Flow Crises Up to 10 Times a Year — Late Payments Cost £11bn</h3>
+        <p>A 2026 report reveals UK SMEs face cash flow difficulties up to 10 times annually. 82% of SMEs have experienced cash flow problems, with the UK's chronic late-payment culture costing the economy roughly £11 billion per year. 55% of SME leaders say cashflow concerns consume attention even when focusing on other priorities. Poor cash flow — not lack of sales — remains the top cause of UK business failure.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">ABC Money / Crowdfund Insider SME Report 2026</span>
+        <a class="read-link" href="https://www.abcmoney.co.uk/2026/03/uk-smes-are-dealing-with-cash-flow-issues-up-to-10-times-a-year-whats-going-wrong" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Budgeting &amp; Forecasting</span><span class="main-topic">Financial Planning</span>
+        <h3>Cash Flow Forecasting Becomes a Survival Tool — UK Businesses Advised to Forecast Weekly</h3>
+        <p>With inflation unpredictable and energy costs volatile, financial planners in 2026 are urging businesses to treat cash flow forecasting as a weekly discipline rather than an occasional exercise. Firms that plan ahead can identify shortfalls weeks in advance, arrange invoice financing or adjust spending before a crisis hits. Directors who delay forecasting until they're in difficulty often find it too late to avoid formal insolvency proceedings.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Deadline News / VOSCAP Business Recovery 2026</span>
+        <a class="read-link" href="https://www.deadlinenews.co.uk/2026/03/11/uk-sme-financial-challenges-in-2026-practical-ways-to-build-resilience/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Interest Rates</span><span class="main-topic">External Influences</span>
+        <h3>Bank of England Holds Rate at 3.75% — Inflation at 3.3%, Above 2% Target</h3>
+        <p>The MPC voted 8–1 to hold Bank Rate at 3.75% in April 2026. CPI inflation reached 3.3%, driven partly by energy price rises linked to the Middle East conflict disrupting Strait of Hormuz shipping. Higher rates raise borrowing costs for businesses — particularly those with variable-rate loans — increasing the gearing risk for highly leveraged firms and reducing consumer spending power.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Bank of England Monetary Policy Report April 2026</span>
+        <a class="read-link" href="https://www.bankofengland.co.uk/monetary-policy-report/2026/april-2026" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Exchange Rates</span><span class="main-topic">External Influences</span>
+        <h3>Pound Strengthens to $1.35 — UK Exporters Face Margin Squeeze as Import Relief Remains Limited</h3>
+        <p>GBP/USD stood at 1.3525 in May 2026 (52-week range: 1.30–1.38). A stronger pound makes UK exports more expensive for overseas buyers, reducing competitiveness. Since Brexit, many UK exporters invoice in dollars, meaning pound strength hits profit margins not volumes. Meanwhile, 74% of exchange-rate changes pass through to import prices — affecting input costs for UK manufacturers buying overseas materials.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">ExchangeRates.org.uk / CEPR VoxEU 2026</span>
+        <a class="read-link" href="https://www.exchangerates.org.uk/blog/1373/2026-05-31-uk-inflation-forecast-how-exchange-rates-could-push-import-prices-higher-again" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Employment Law</span><span class="main-topic">External Influences</span>
+        <h3>Employment Rights Act 2025: Day-One Rights, Statutory Sick Pay Reform and New Fair Work Agency — April 2026</h3>
+        <p>The UK's biggest employment law overhaul in a generation took effect in April 2026. Key changes: statutory sick pay from day one (no earnings threshold, no 3-day wait), day-one parental leave entitlement, and the launch of the Fair Work Agency to enforce minimum wage and worker rights. Maximum protective award for collective redundancy failures doubles to 180 days' pay. Further reforms on "fire and rehire" and zero-hours contracts follow in late 2026.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Bird &amp; Bird / Pinsent Masons Employment Rights Act 2025</span>
+        <a class="read-link" href="https://www.twobirds.com/en/insights/2026/uk/uk-employment-rights-act-2025--whats-new-from-april-2026" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Lean Production</span><span class="main-topic">Resource Management</span>
+        <h3>Toyota's Lean Approach: Produce Only What's Needed, Fix Problems Immediately, Empower Workers</h3>
+        <p>Toyota UK's lean manufacturing system — built on three principles: produce only what is needed when needed, correct abnormalities immediately, and empower workers to improve processes — remains a benchmark studied in Edexcel papers. In 2026, integrating lean with Six Sigma reduces defect levels, cuts cycle times and lowers inventory costs. UK firms adopting lean systems report up to 40% faster time-to-market for new products.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Toyota Manufacturing UK / NetSuite Lean Manufacturing 2026</span>
+        <a class="read-link" href="https://www.toyotauk.com/lean-approach/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Supply Chain Management</span><span class="main-topic">Resource Management</span>
+        <h3>Supply Chains Shift from "Just-in-Time" to "Antifragile" — Resilience Beats Efficiency in 2026</h3>
+        <p>The just-in-time production model — designed to minimise inventory and waste — has been exposed as vulnerable to disruption. In 2026, leading firms are redesigning operations to be "antifragile": building redundancy into supplier networks, regionalising production into "local-for-local" hubs, and using data to predict disruptions before they hit. The global supply chain management market is projected to reach $31 billion by 2026.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">ASCM Insights / KPMG Supply Chain Trends 2026</span>
+        <a class="read-link" href="https://www.ascm.org/ascm-insights/2026-begins/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Economic Growth &amp; GDP</span><span class="main-topic">External Influences</span>
+        <h3>IMF Delivers UK's Biggest Growth Downgrade Among Rich Nations — 0.5pp Cut for 2026</h3>
+        <p>Both the IMF and OECD slashed their UK 2026 growth forecasts by 0.5 percentage points — the largest downgrade of any developed economy this year. Slower growth reduces consumer spending, dampens investment, and increases pressure on revenue forecasts. For businesses with fixed cost bases, a slowing economy significantly raises the risk of operating losses and reduces the break-even threshold of safety.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">CNBC / Resolution Foundation Macroeconomic Outlook Q2 2026</span>
+        <a class="read-link" href="https://www.cnbc.com/2026/05/18/bank-of-england-interest-rates-inflation-imf-gdp.html" target="_blank">Read →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════ THEME 3 ═══════════════════════ -->
+<div id="t3" class="theme-panel">
+  <div class="theme-header t3-header">
+    <div class="theme-number">3</div>
+    <div>
+      <h2>Business Decisions &amp; Strategy</h2>
+      <p class="sub">Year 13 · Paper 2 (with Theme 2) · Strategic evaluation is central to top marks</p>
+      <div class="topic-pills">
+        <span class="topic-pill">Business Objectives &amp; Strategy</span>
+        <span class="topic-pill">Business Growth (M&amp;A)</span>
+        <span class="topic-pill">Decision-Making Techniques</span>
+        <span class="topic-pill">Influences on Decisions</span>
+        <span class="topic-pill">Assessing Competitiveness</span>
+        <span class="topic-pill">Managing Change</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-tip">
+    <strong>📌 Paper 2 Exam Tip</strong>
+    M&amp;A stories are excellent for "business growth" questions — always identify whether a deal is horizontal, vertical or conglomerate integration, and evaluate the motive (capability vs. market share). For CSR/ethics, link to Carroll's Pyramid or stakeholder theory. Use the geopolitics story to illustrate PESTLE analysis.
+  </div>
+
+  <div class="section-label">10 current stories — Theme 3: Business Decisions &amp; Strategy</div>
+  <div class="news-grid t3">
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Mergers &amp; Acquisitions</span><span class="main-topic">Business Growth</span>
+        <h3>Global M&amp;A Surges 65% in Deal Value in 2026 — Tech and AI Capability Acquisitions Drive Mega-Deals</h3>
+        <p>Corporate dealmaking in 2026 has accelerated sharply: transactions above $100m rose 65% in value and 17% in volume year-on-year. Deals above $5 billion surged 149% in value. The primary motive is capability acquisition — firms buying AI technology, data access, cloud infrastructure and cybersecurity expertise they cannot build fast enough internally. Technology, life sciences and consumer goods lead by deal value.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">EY M&amp;A Activity Report April 2026 / PwC Global M&amp;A Trends</span>
+        <a class="read-link" href="https://www.ey.com/en_us/insights/mergers-acquisitions/m-and-a-activity-report" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Organic Growth &amp; Franchising</span><span class="main-topic">Business Growth</span>
+        <h3>UK Franchise Sector Generates £19.1bn — 77% of Franchisors Confident for 2026 Despite Uncertainty</h3>
+        <p>The UK franchise sector contributes £19.1 billion to the economy with a 20-year failure rate of under 6%. 77% of franchisors report confidence in 2026 plans. The Property Franchise Group grew revenue 25% to £84.3m in 2025. Franchising blends organic growth (no new debt) with rapid expansion — franchisees supply capital and labour while the franchisor expands the brand and collects royalties.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Franchise Direct UK / New Business 2026</span>
+        <a class="read-link" href="https://www.franchisedirect.co.uk/information/growth-and-trends-in-the-uk-franchise-market" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Corporate Strategy</span><span class="main-topic">Business Objectives &amp; Strategy</span>
+        <h3>Firms Pivot Strategy from Cost Optimisation to "Total Value" — Human Capital and Ethics Now Core</h3>
+        <p>Leading organisations in 2026 have moved beyond short-term cost reduction as the primary strategic goal. The new model — "Total Value" — integrates financial returns with human capital development, supply chain ethics, sustainability and risk management. Investing in ethical operations and workforce wellbeing is now considered a competitive strategy, not a compliance cost, and features increasingly in analyst valuations.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">KPMG Supply Chain &amp; Strategy 2026 / Ivalua</span>
+        <a class="read-link" href="https://kpmg.com/se/en/insights/2026/supply-chain-trends-2026.html" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">CSR &amp; Governance</span><span class="main-topic">Influences on Decisions</span>
+        <h3>New UK Corporate Governance Code 2026 Demands Stronger Board Accountability on ESG and Culture</h3>
+        <p>The Financial Reporting Council's 2026 UK Corporate Governance Code revision requires boards to demonstrate how company purpose aligns with long-term strategy, show how they listen to stakeholders beyond shareholders, and produce clearer evidence on ESG commitments. Directors must now actively show how they address concerns from employees, customers, suppliers and communities — a direct application of stakeholder theory and Carroll's Pyramid.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Imran Hussain / LegalVision UK Corporate Governance 2026</span>
+        <a class="read-link" href="https://imranhussain.com/uk-governance-code-2026/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Ethics &amp; Stakeholders</span><span class="main-topic">Influences on Decisions</span>
+        <h3>Multinational Tax Ethics in Focus: Global 15% Minimum Tax Disrupts Transfer Pricing Strategies</h3>
+        <p>From 2026, many multinationals must account for a global minimum corporate tax rate of 15% (Pillar Two), which closes the loopholes that allowed firms to shift profits to low-tax jurisdictions via transfer pricing. The EU and Australia are pushing for public country-by-country tax disclosures — increasing reputational risk for firms perceived as avoiding their "fair share" of tax, a growing concern for stakeholders and consumers.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Galleros Robinson / Chambers &amp; Partners Tax Controversy 2026</span>
+        <a class="read-link" href="https://gallerosrobinson.com/transfer-pricing-in-2026-key-irs-risks-compliance-strategies-and-intercompany-loan-pitfalls-for-multinationals/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Competitive Advantage</span><span class="main-topic">Assessing Competitiveness</span>
+        <h3>Seven Sectors Primed for M&amp;A Consolidation — Scale Economies and Market Power as Strategic Goals</h3>
+        <p>Analysts identify technology, life sciences, consumer goods, retail, financial services, energy transition and healthcare as the sectors most likely to see competitive consolidation in 2026. Firms acquiring rivals gain scale economies and market share but face integration risk — particularly around culture, workforce retention and post-merger IT systems. Porter's Five Forces framework predicts that consolidation reduces the threat of new entrants and intensifies buyer power in concentrated markets.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Benchmark International / Morgan Stanley M&amp;A Outlook 2026</span>
+        <a class="read-link" href="https://www.benchmarkintl.com/insights/7-sectors-primed-for-ma-in-2026/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">PESTLE Analysis</span><span class="main-topic">Decision-Making Techniques</span>
+        <h3>Geopolitics Is Now a Primary Business Decision Driver — McKinsey Maps the New Global Value Chain</h3>
+        <p>McKinsey's 2026 Global Value Chain update finds that tariffs, national security concerns, industrial policy and climate targets are reshaping how firms decide where to invest and produce. Businesses can no longer treat PESTLE as a theoretical exercise — political and legal factors directly override financial optimisation in investment decisions. Supply chain diversification and modular manufacturing have become strategic priorities over pure cost analysis.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">McKinsey Global Institute / WEF Trade Strategy 2026</span>
+        <a class="read-link" href="https://www.mckinsey.com/mgi/our-research/geopolitics-and-the-geometry-of-global-trade-2026-update" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Managing Change</span><span class="main-topic">Managing Change</span>
+        <h3>AI Adoption Reshapes Every Business Function — Change Management Is Now a Board-Level Imperative</h3>
+        <p>The rapid rollout of AI agents across marketing, HR, finance and operations is forcing businesses to manage change at unprecedented speed. Firms investing in reskilling staff and redesigning workflows are gaining competitive advantages; those that resist face widening productivity gaps. Kotter's 8-step model is increasingly referenced by consultants guiding boards through AI-driven transformation — especially around creating urgency, building coalitions and embedding the change in culture.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Refonte Learning / JPMorgan Business Leaders Outlook 2026</span>
+        <a class="read-link" href="https://www.refontelearning.com/blog/business-development-in-2026-trends-skills-and-strategies-for-growth" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Risk &amp; Decision-Making</span><span class="main-topic">Decision-Making Techniques</span>
+        <h3>49% of Business Leaders Cite Economic Uncertainty as Top Risk — Yet 71% Expect Company Growth</h3>
+        <p>JPMorgan's 2026 Business Leaders Outlook highlights a paradox: 49% of leaders name uncertain economic conditions as their top concern, yet 71% remain confident in their own company performance and 64% expect higher profits. This mirrors the scientific vs. intuitive decision-making tension in the Edexcel spec — firms must balance data-driven risk assessment with entrepreneurial judgement when planning under uncertainty.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">JPMorgan 2026 Business Leaders Outlook</span>
+        <a class="read-link" href="https://www.jpmorgan.com/insights/markets-and-economy/business-leaders-outlook/2026-us-business-leaders-outlook" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Innovation Strategy</span><span class="main-topic">Assessing Competitiveness</span>
+        <h3>Innovate UK Pivots to "Picking Winners" — Sector-Focused Strategy Replaces Broad Grants</h3>
+        <p>Innovate UK's 2026 overhaul moves from broad innovation funding to a targeted, sector-specific model — focusing resources on six areas with the highest growth potential. This mirrors a business strategy concept: rather than diversifying investment across all options, firms with limited resources should concentrate on areas of competitive advantage. The shift raises questions about who gains and loses from a less inclusive approach to public funding.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Research Professional News / UKRI Innovate UK 2026</span>
+        <a class="read-link" href="https://www.researchprofessionalnews.com/rr-news-uk-innovation-2026-3-innovate-uk-pivots-to-picking-winners-in-major-overhaul/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════ THEME 4 ═══════════════════════ -->
+<div id="t4" class="theme-panel">
+  <div class="theme-header t4-header">
+    <div class="theme-number">4</div>
+    <div>
+      <h2>Global Business</h2>
+      <p class="sub">Year 13 · Paper 1 (with Theme 1) · Name specific trade blocs, multinationals and countries</p>
+      <div class="topic-pills">
+        <span class="topic-pill">Globalisation</span>
+        <span class="topic-pill">Global Markets &amp; Expansion</span>
+        <span class="topic-pill">Global Marketing</span>
+        <span class="topic-pill">Global Industries &amp; Companies</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-tip">
+    <strong>📌 Paper 1 Exam Tip</strong>
+    Global business questions reward named examples: cite "US 10% tariff under Section 122", "EU-UK TCA energy provisions", "Pillar Two 15% global minimum tax". For localisation vs. standardisation debates, use specific regions (Sub-Saharan Africa, Southeast Asia) to show geographical awareness. FDI arguments should reference both push factors (lower costs) and pull factors (market access).
+  </div>
+
+  <div class="section-label">10 current stories — Theme 4: Global Business</div>
+  <div class="news-grid t4">
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Protectionism &amp; Tariffs</span><span class="main-topic">Globalisation</span>
+        <h3>US Tariff Rate Hits 22% — Highest in a Century Before Supreme Court Ruling Resets to 10%</h3>
+        <p>The average effective US tariff rate jumped from 2.4% in late 2024 to around 22% in April 2025 — its highest level since the early 1900s. The US Supreme Court then ruled 6–3 that emergency economic powers do not authorise the President to impose tariffs, after which a new 10% global tariff was enacted under Section 122. This illustrates how protectionism can disrupt global supply chains, increase costs for multinational firms and reverse decades of trade liberalisation.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">UNCTAD Global Trade Update / Avalara Tariffs 2026</span>
+        <a class="read-link" href="https://unctad.org/news/10-trends-shaping-global-trade-2026" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Trade Blocs</span><span class="main-topic">Globalisation</span>
+        <h3>EU-UK Trade Deal Under Review in 2026 — Energy Cooperation Provisions Expire June 30th</h3>
+        <p>The EU-UK Trade and Cooperation Agreement (TCA) is being formally reviewed in 2026 under Article 776. Key energy cooperation provisions expire on 30 June 2026. The EU is simultaneously considering heavy tariffs on non-EU steel imports, halving import quotas. For UK exporters, uncertain trade arrangements with both the EU and US represent a major external constraint on strategy — directly relevant to PESTLE analysis.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">House of Commons Library / IoD Director Weekly 2026</span>
+        <a class="read-link" href="https://commonslibrary.parliament.uk/research-briefings/cbp-10390/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Trade Flows</span><span class="main-topic">Global Markets &amp; Expansion</span>
+        <h3>Global Trade Keeps Growing Despite Tariffs — Brazil, Southeast Asia and Gulf Emerge as New Partners</h3>
+        <p>Despite elevated tariff barriers, global trade volumes continue to grow as businesses reroute around restrictions. Brazil, Southeast Asia and Gulf states are the biggest beneficiaries of trade diversion as firms seek alternatives to US-China direct routes. The traditional globalised model based on just-in-time logistics and cost optimisation is being replaced by regionalised configurations — a structural shift with long-term implications for MNC strategy.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Christian Science Monitor / McKinsey Global Trade 2026</span>
+        <a class="read-link" href="https://www.csmonitor.com/layout/set/amphtml/Business/2026/0429/trade-tariffs-trump-brazil-china-canada" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Foreign Direct Investment</span><span class="main-topic">Global Markets &amp; Expansion</span>
+        <h3>UK Remains Top Destination for US Foreign Direct Investment — FDI Position Exceeds £2 Trillion</h3>
+        <p>The UK's inward FDI position stood at over £2 trillion in 2024, with the US accounting for 33.9% of all inward investment. Financial services (31%), professional services (19%) and manufacturing (15.5%) attract the most FDI. The UK's common law system, English language and access to global talent remain key pull factors for international investors, despite post-Brexit trade friction acting as a partial deterrent.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">House of Commons Library / ONS FDI Statistics 2024</span>
+        <a class="read-link" href="https://commonslibrary.parliament.uk/research-briefings/cbp-8534/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Localisation vs. Standardisation</span><span class="main-topic">Global Marketing</span>
+        <h3>"Local-First" Global Marketing Is Winning in 2026 — What Works in San Francisco Fails in Nairobi</h3>
+        <p>The dominant debate in global marketing in 2026 is localisation vs. standardisation. Brands expanding to Sub-Saharan Africa, South Asia and Southeast Asia are learning that language, culture, purchasing power and mobile-first consumer behaviour require deep local adaptation — not a scaled-down version of Western campaigns. Firms using AI to deliver hyper-personalised, locally relevant content at scale are outperforming standardised global campaigns.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Verbolabs / Monday.com International Marketing 2026</span>
+        <a class="read-link" href="https://www.verbolabs.com/global-marketing-trends/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Emerging Markets</span><span class="main-topic">Global Markets &amp; Expansion</span>
+        <h3>Emerging Market Firms Now 30% of Fortune Global 500 — Up from Under 10% a Decade Ago</h3>
+        <p>Multinationals from emerging economies now account for 30% of the Fortune Global 500, compared to under 10% ten years ago. Chinese, Indian and Brazilian companies are increasingly competing with Western incumbents in technology, energy, financial services and consumer goods. IMF projections show emerging markets contributing nearly 80% of global GDP growth by 2030 — making them essential markets for any business with global ambitions.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">CityBiz / University of Edinburgh Business School</span>
+        <a class="read-link" href="https://www.citybiz.co/article/781188/global-companies-accelerate-expansion-into-emerging-markets/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Multinational Ethics</span><span class="main-topic">Global Industries &amp; Companies</span>
+        <h3>Transfer Pricing Under the Spotlight — Global 15% Minimum Tax Closes Profit-Shifting Loopholes</h3>
+        <p>Pillar Two of the OECD's global tax framework mandates a 15% minimum corporate tax rate for large multinationals from 2026. This closes the loophole that allowed firms to use transfer pricing — artificially setting internal prices between subsidiaries — to shift profits to low-tax jurisdictions. The EU and Australia are pushing for public disclosure of country-by-country tax data, raising reputational stakes for firms seen as avoiding tax responsibilities.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Bloomberg Tax / Chambers &amp; Partners Transfer Pricing 2026</span>
+        <a class="read-link" href="https://news.bloombergtax.com/tax-management-international/transfer-pricing-landscape-shifts-amid-irs-changes-and-tariffs" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Offshoring &amp; Nearshoring</span><span class="main-topic">Global Markets &amp; Expansion</span>
+        <h3>Businesses Abandon Offshoring for Nearshoring — Geopolitical Risk Trumps Labour Cost Savings</h3>
+        <p>The traditional motivation for offshoring — reducing labour and production costs by moving operations to developing economies — is being overtaken by risk management concerns. In 2026, firms are increasingly nearshoring: relocating production to geographically closer, politically stable countries. This reduces supply chain exposure to tariffs, shipping disruptions and political instability, even at higher cost. The trade-off between cost efficiency and resilience is a core strategic dilemma for global firms.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">McKinsey Global Institute / UNCTAD Global Trade Update 2026</span>
+        <a class="read-link" href="https://unctad.org/publication/global-trade-update-january-2026-top-trends-redefining-global-trade-2026" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Global Growth Slowdown</span><span class="main-topic">Global Industries &amp; Companies</span>
+        <h3>Global Growth Slows to 2.6% in 2026 — Developing Economies Squeezed by High Rates and Weak Demand</h3>
+        <p>UNCTAD projects global growth at just 2.6% in 2026, with developing economies (excluding China) slowing to around 4.2%. Weak demand from the US, China and Europe — combined with elevated interest rates, currency volatility and tight capital flows — are squeezing businesses in emerging markets that rely on export revenues. This environment of subdued global demand complicates market entry and expansion decisions for multinationals.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">UNCTAD Global Trade Update January 2026</span>
+        <a class="read-link" href="https://unctad.org/publication/global-trade-update-january-2026-top-trends-redefining-global-trade-2026" target="_blank">Read →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="subtopic-tag">Global Digital Expansion</span><span class="main-topic">Global Marketing</span>
+        <h3>Digital Channels Remove the Need for Physical Presence — Ecommerce Enables Low-Cost Market Testing</h3>
+        <p>One of the most significant structural shifts in global expansion strategy in 2026 is that firms no longer need a physical presence to test a new market. Ecommerce platforms, digital advertising, locally tuned mobile apps and AI-translated content allow businesses to enter markets at low cost and gauge demand before committing to bricks-and-mortar investment. Mobile-first platforms dominate in emerging markets where smartphone penetration outpaces desktop — shifting the entry strategy playbook fundamentally.</p>
+      </div>
+      <div class="card-bottom">
+        <span class="source-name">Verbolabs / CityBiz Global Expansion 2026</span>
+        <a class="read-link" href="https://www.verbolabs.com/global-marketing-trends/" target="_blank">Read →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>Edexcel A-Level Business (9BS0) &nbsp;·&nbsp; 40 stories across Themes 1–4 &nbsp;·&nbsp; News compiled June 2026 &nbsp;·&nbsp; For teaching and revision purposes only</p>
+  <p style="margin-top:6px;font-size:0.7rem;color:#7a90a8;">All stories link to original sources. Content is curated for relevance to the Pearson Edexcel specification — always cross-reference with official Pearson materials at qualifications.pearson.com</p>
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.theme-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
